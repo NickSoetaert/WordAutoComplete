@@ -41,7 +41,6 @@ public:
         _root = new TrieNode{}; //why the {}s? Google aggregate initialization
     }
 
-    //TODO: Implement
     virtual ~Trie()
     {
         //destroyTree(_root);
@@ -69,7 +68,7 @@ public:
     TrieNode* addWordHelper(const string &word, TrieNode* node)
     {
         if(node->isSentinel()){ //base case: no more letters.
-            //cout << "end of word!" << endl;
+
             counter = 0; //reset for next word
             return node; //simply return our original root (why though?) once there are no more nodes to create
         }
@@ -77,17 +76,10 @@ public:
             TrieNode* newNode = new TrieNode();//create new node
             newNode->setValue(word[counter]); //give this new node a letter
             node->setChild(word[counter], newNode); //make this new node the child of the current node
-            //cout<< "Added [" << word[counter] << "] as child to [" 
-            //    << node->getValue() << "] (child is nullptr)" << endl;
             counter++;
             addWordHelper(word, newNode); //recursively call
         }
         else{
-            //do NOT create a new node
-            //do NOT set any nodes as the child of this node
-            //cout<< "Did NOT define [" << word[counter] 
-            //    << "] as a new child to [" << node->getValue() 
-            //    << "], as it was already equal to that." << endl;
             counter++;
             addWordHelper(word, node->getChild(word[counter-1])); //i-1 to offset i++
         }        
@@ -98,7 +90,7 @@ public:
     {
         //word: word we check for to see if it has any autocompletes
         //_root: the root of the tree
-        vector<string> matches; //once a match is found, put it in here. Adam made this val.
+        vector<string> matches; //once a match is found, put it in matches.
         string stringThatIsConcatinated; //string that gets put into matches.
         searchHelper(word, _root, matches, stringThatIsConcatinated);
         return matches;
@@ -126,7 +118,7 @@ public:
             searchHelper(index, node->getChild(index[wordIndex-1]), matches, run); //-1 to account for wordIndex++, which can't go after recursive call. 
             //^This was the bug that I spent literally 8+ hours on. An off by 1 error. lol.
         } 
-        else{ //should never get here
+        else{
             cout << "Only alphabetical input please." << endl;
             exit(0);
         }
